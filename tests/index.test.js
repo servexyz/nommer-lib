@@ -3,10 +3,16 @@ import test from "ava";
 import path from "path";
 import chalk from "chalk";
 import { printMirror, printLine } from "tacker";
+
+let nmDir = path.join(process.cwd(), "node_modules");
+let sandboxNmDir = path.join(
+  process.cwd(),
+  "sandbox",
+  "npm-starter-sample-module"
+);
 test(`${chalk.blue("nmExists")} :: node_modules ${chalk.underline(
   "exists"
 )} in this directory`, async t => {
-  let nmDir = path.join(process.cwd(), "node_modules");
   try {
     await nmExists(nmDir);
     t.pass();
@@ -15,20 +21,33 @@ test(`${chalk.blue("nmExists")} :: node_modules ${chalk.underline(
   }
 });
 
-//TODO: Create a test.before ->  removes node_modules from sandbox repo
+test.before(
+  `${chalk.yellow("nmExists")} :: node_modules are deleted`,
+  async t => {
+    try {
+      let exists = await nmExists(sandboxNmDir);
+      printMirror({ exists }, "magenta", "grey");
+      if (exists === false) {
+        t.pass();
+      } else {
+        t.fail();
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+);
+//TODO: Create a test.before ->  confirm node_modules don't exist
 //TODO: Create a test.serial.before -> confirms node_modules directory is not there
 //TODO: Create a test.serial.before -> install node_modules
 //TODO: Create a test.serial.before -> confirm node_modules exist
-test(`${chalk.blue("nmInstall")} :: node_modules ${chalk.underline(
+//TODO: Create a test.after -> remove node_modules
+
+test.skip(`${chalk.blue("nmInstall")} :: node_modules ${chalk.underline(
   "does not exist"
 )} in ${chalk.cyan(
   "npm-starter-sample-module"
 )} and are subsequently installed`, async t => {
-  let sandboxNmDir = path.join(
-    process.cwd(),
-    "sandbox",
-    "npm-starter-sample-module"
-  );
   printMirror({ sandboxNmDir }, "green", "grey");
   t.plan(3);
   let x = await nmExists(sandboxNmDir);
