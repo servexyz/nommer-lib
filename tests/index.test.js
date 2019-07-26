@@ -52,6 +52,8 @@ test(`${chalk.blue(
 )} :: adds node_modules to directory`, async t => {
   printMirror({ rootDir }, "green", "grey");
   try {
+    t.plan(2);
+    t.false(rootDir.endsWith("node_modules"));
     let nmPath = await getNodeModulesPath(rootDir);
     printMirror({ nmPath }, "magenta", "grey");
     t.true(nmPath.endsWith("node_modules"));
