@@ -61,6 +61,20 @@ test(`${chalk.blue(
     t.fail(e);
   }
 });
+
+test(`${chalk.blue(
+  "getNodeModulesPath"
+)} :: successfully returns false if path does not exist`, async t => {
+  printMirror({ rootDir }, "green", "grey");
+  try {
+    let fakePath = "/path/does/not/exist";
+    let nmPath = await getNodeModulesPath(fakePath);
+    t.false(nmPath);
+  } catch (e) {
+    t.fail(e);
+  }
+});
+
 // test.serial.before(`${chalk.blue("nmInstall")}`, async t => {
 //   try {
 //     await nmInstall(sandboxNmDir);
