@@ -42,14 +42,22 @@ export async function nmUninstall(szPath) {
   //? Probably not good idea to actually export this...
   //? Difficult to protect users from accidentally deleting their own shit.
   //? Added getNodeModulesPath() as prelim user protection, but still probably not enough
-  printMirror({ szPath }, "yellow", "grey");
+  //TODO: Add a check that prevents it from running if szPath is === process.cwd()
+  // printMirror({ szPath }, "yellow", "grey");
   let nmPath = await getNodeModulesPath(szPath);
-  printMirror({ nmPath }, "yellow", "grey");
+  // printMirror({ nmPath }, "yellow", "grey");
   if (nmPath !== false) {
     printMirror({ nmPath }, "yellow", "grey");
     try {
-      await execa("rm", ["-Rf", szPath], { cwd: nmPath });
-      return true;
+      if (nmPath !== process.cwd()) {
+        await execa("rm", ["-Rf", szPath], { cwd: nmPath });
+        return true;
+      } else {
+        console.warn(
+          "To prevent accidents, nmUninstall will not remove the provided path if it matches your current working directory"
+        );
+        return null;
+      }
     } catch (e) {
       throw new Error(e);
     }

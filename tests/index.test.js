@@ -47,6 +47,15 @@ const sandboxNmDir = path.join(
 //     }
 //   }
 // );
+test(`${chalk.blue("nmUninstall")} :: confirm node_modules in ${chalk.cyan(
+  "npm-starter-sample-module"
+)} are removed`, async t => {
+  try {
+    t.true(await nmUninstall(sandboxNmDir));
+  } catch (e) {
+    throw new Error(e);
+  }
+});
 test(`${chalk.blue(
   "getNodeModulesPath"
 )} :: adds node_modules to directory`, async t => {
