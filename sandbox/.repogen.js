@@ -6,6 +6,6 @@ const config = {
       servexyz: "npm-starter-sample-module"
     }
   ]
-}
+};
 
 module.exports = { config };
