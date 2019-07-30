@@ -22,8 +22,13 @@ const symlink = path.join(sandbox, "npm-starter-sample-module");
 test.before(async t => {
   let { config } = require(path.join(cwd, "sandbox", ".repogen.js"));
   //TODO: Make this a function in repo-config
-  if ((await pathsExist(symlink)) === false) {
-    if ((await pathsExist(repository)) === true) {
+  let symStatus = await pathsExist(symlink);
+  let repoStatus = await pathsExist(repository);
+  if (symStatus === false || repoStatus === false) {
+    if (symStatus === true) {
+      await execa("rm", ["-Rf", symlink]);
+    }
+    if (repoStatus === true) {
       await execa("rm", ["-Rf", repository]);
     }
     await init(config);
@@ -80,18 +85,7 @@ test(`${chalk.blue(
   }
 });
 
-// test.serial.before(`${chalk.blue("nmInstall")}`, async t => {
-//   try {
-//     await nmInstall(sandboxNmDir);
-//     t.pass();
-//   } catch (e) {
-//     throw new Error(e);
-//   }
-// });
-
-//TODO: Change test to test.after.always
-
-test.after(async t => {
+test.after.always(async t => {
   try {
     if ((await pathsExist(await getNodeModulesPath(symlink))) === true) {
       t.true(await nmRemove(symlink));
