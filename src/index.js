@@ -1,17 +1,13 @@
 import { pathsExist } from "paths-exist";
 import { printMirror } from "tacker";
 import path from "path";
-import execa from "execa";
 
 export async function nmExists(mPath) {
   //TODO: Add logic to append node_modules directory if root directory provided
   try {
-    let pex = await pathsExist(mPath);
-    printMirror({ pex }, "cyan", "grey");
-    return true;
+    return await pathsExist(mPath);
   } catch (e) {
-    printMirror({ e }, "magenta", "grey");
-    return false;
+    throw new Error(e);
   }
 }
 export async function getNodeModulesPath(szPath) {

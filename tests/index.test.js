@@ -1,3 +1,4 @@
+const log = console.log;
 import {
   nmExists,
   nmInstall,
@@ -8,7 +9,9 @@ import test from "ava";
 import path from "path";
 import chalk from "chalk";
 import { printMirror, printLine } from "tacker";
+import { pathsExist } from "paths-exist";
 import { init } from "repo-genesis";
+import execa from "execa";
 
 // https://github.com/servexyz/repo-genesis/blob/master/tests/repo.test.js
 const rootDir = process.cwd();
@@ -53,19 +56,24 @@ test.before(
     "npm-starter-sample-module"
   )} are removed`,
   async t => {
-    let rgen = {
-      symlink: path.join(process.cwd(), "sandbox", "npm-starter-sample-module"),
-      repository: path.join(
-        process.cwd(),
-        "sandbox",
-        ".repositories",
-        "npm-starter-sample-module"
-      )
-    };
-    try {
-      t.true(await nmUninstall(sandboxNmDir));
-    } catch (e) {
-      throw new Error(e);
+    let repository = path.join(process.cwd(), "sandbox", ".repositories");
+    let symlink = path.join(
+      process.cwd(),
+      "sandbox",
+      "npm-starter-sample-module"
+    );
+    let { config } = require(path.join(
+      process.cwd(),
+      "sandbox",
+      ".repogen.js"
+    ));
+    log("rgen repo", repository);
+    if ((await pathsExist(symlink)) === false) {
+      if ((await pathsExist(repository)) === true) {
+        log("---------------remove repo--------------------");
+        await execa("rm", ["-Rf", repository]);
+      }
+      await init(config);
     }
   }
 );
