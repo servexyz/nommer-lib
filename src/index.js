@@ -23,6 +23,7 @@ export function getNodeModulesPath(szPath) {
     return path.join(szPath, "node_modules");
   }
 }
+//TODO: Figure out why this works locally but fails on test
 export async function nmInstall(szPath) {
   if (typeof szPath === "undefined") return null;
   try {

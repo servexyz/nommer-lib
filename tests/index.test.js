@@ -12,6 +12,7 @@ import { printMirror, printLine } from "tacker";
 import { pathsExist } from "paths-exist";
 import { init } from "repo-genesis";
 import execa from "execa";
+import isTravis from "is-travis";
 
 const cwd = process.cwd();
 const sandbox = path.join(cwd, "sandbox");
@@ -24,6 +25,11 @@ test.before(async t => {
   //TODO: Make this a function in repo-config
   let symStatus = await pathsExist(symlink);
   let repoStatus = await pathsExist(repository);
+  if (isTravis) {
+    await execa("rm", ["-Rf", symlink]);
+    await execa("rm", ["-Rf", repository]);
+  }
+  // * Reason for not just wiping out is don't want to have to re-clone constantly during local tests
   if (symStatus === false || repoStatus === false) {
     if (symStatus === true) {
       await execa("rm", ["-Rf", symlink]);
