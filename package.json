@@ -1,6 +1,6 @@
 {
   "name": "nommer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "check, install or remove node_modules",
   "main": "build/main.js",
   "license": "MIT",
