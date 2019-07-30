@@ -91,6 +91,43 @@ test(`${chalk.blue(
   }
 });
 
+test(`${chalk.blue(
+  "nmExists"
+)} :: returns null if param undefined`, async t => {
+  try {
+    t.is(await nmExists(), null);
+  } catch (e) {
+    t.fail(e);
+  }
+});
+test(`${chalk.blue(
+  "nmInstall"
+)} :: returns null if param undefined`, async t => {
+  try {
+    t.is(await nmInstall(), null);
+  } catch (e) {
+    t.fail(e);
+  }
+});
+test(`${chalk.blue(
+  "nmRemove"
+)} :: returns null if param undefined`, async t => {
+  try {
+    t.is(await nmRemove(), null);
+  } catch (e) {
+    t.fail(e);
+  }
+});
+test(`${chalk.blue(
+  "getNodeModulesPath"
+)} :: returns null if param undefined`, async t => {
+  try {
+    t.is(await getNodeModulesPath(), null);
+  } catch (e) {
+    t.fail(e);
+  }
+});
+
 test.after.always(async t => {
   try {
     if ((await pathsExist(await getNodeModulesPath(symlink))) === true) {
