@@ -1,13 +1,22 @@
 {
   "name": "nommer",
-  "version": "0.1.0",
-  "description": "node_module path checker & optional node_module installer",
+  "version": "0.2.0",
+  "description": "check, install or remove node_modules",
   "main": "build/main.js",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/servexyz/nommer-lib"
   },
+  "keywords": [
+    "node modules",
+    "node_modules",
+    "nommer",
+    "remove node modules",
+    "install node modules",
+    "check node modules",
+    "node modules exist",
+  ],
   "devDependencies": {
     "@ava/babel-preset-stage-4": "^3.0.0",
     "@babel/core": "7.5.0",
