@@ -45,7 +45,7 @@
     "dev:vanillaModule": "babel-node src/index.js",
     "dev:liveReloadedModule": "nodemon --watch src/index.js --exec 'babel-node src/index.js'",
     "dev:server": "webpack --mode development --watch --display minimal",
-    "test": "npm-run-all -s clean:build build test:liveReloadedAva",
+    "test": "npm-run-all -s clean:build build test:ava",
     "test:ava": "ava",
     "test:liveReloadedAva": "ava --watch",
     "production": "npm run build && node build/main.js",

@@ -1,5 +1,7 @@
+const log = console.log;
 import { pathsExist } from "paths-exist";
 import { printMirror } from "tacker";
+import execa from "execa";
 import path from "path";
 
 export async function nmExists(mPath) {
@@ -11,16 +13,15 @@ export async function nmExists(mPath) {
   }
 }
 export async function getNodeModulesPath(szPath) {
-  printMirror({ szPath }, "cyan", "grey");
+  // printMirror({ szPath }, "cyan", "grey");
   if (szPath.endsWith("node_modules")) {
     return szPath;
   } else {
     let nmPath = path.join(szPath, "node_modules");
-    printMirror({ nmPath }, "cyan", "grey");
+    // printMirror({ nmPath }, "cyan", "grey");
     try {
       let bNM = await nmExists(szPath);
-      // ? bNM is false
-      printMirror({ bNM }, "cyan", "grey");
+      // printMirror({ bNM }, "cyan", "grey");
       return bNM === true ? nmPath : false;
     } catch (e) {
       throw new Error(e);
@@ -28,12 +29,15 @@ export async function getNodeModulesPath(szPath) {
   }
 }
 export async function nmInstall(szPath) {
+  if (typeof szPath === "undefined") return null;
   try {
     await execa("npm", ["install"], { cwd: szPath });
+    return true;
   } catch (e) {
-    throw new Error(e);
+    return false;
   }
 }
+//TODO: Rename nmUninstall to nmRemove
 export async function nmUninstall(szPath) {
   //? Probably not good idea to actually export this...
   //? Difficult to protect users from accidentally deleting their own shit.
@@ -43,10 +47,11 @@ export async function nmUninstall(szPath) {
   let nmPath = await getNodeModulesPath(szPath);
   // printMirror({ nmPath }, "yellow", "grey");
   if (nmPath !== false) {
-    printMirror({ nmPath }, "yellow", "grey");
+    // printMirror({ nmPath }, "yellow", "grey");
+    log(`getNodeModulesPath - nmPath is false`);
     try {
       if (nmPath !== process.cwd()) {
-        await execa("rm", ["-Rf", szPath], { cwd: nmPath });
+        await execa("rm", ["-Rf", nmPath], { cwd: nmPath });
         return true;
       } else {
         console.warn(
@@ -58,6 +63,7 @@ export async function nmUninstall(szPath) {
       throw new Error(e);
     }
   } else {
+    log("getNodeModulesPath else");
     return false;
   }
 }
