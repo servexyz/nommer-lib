@@ -15,7 +15,7 @@
     "remove node modules",
     "install node modules",
     "check node modules",
-    "node modules exist",
+    "node modules exist"
   ],
   "devDependencies": {
     "@ava/babel-preset-stage-4": "^3.0.0",
