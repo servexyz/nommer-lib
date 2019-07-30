@@ -30,24 +30,56 @@ import { nmExists } from 'nommer'
 // Assume "/path/containing/node_modules" is path to installed node_modules
 
 (async () => {
-  await nmExists("/path/containing") // --> true
-  await nmExists("/path/containing/node_modules") // --> true
-  await nmExists("/path/") // --> false
-  await nmExists("/path/node_modules") // --> false
+  await nmExists() 
+  // --> returns null
+  await nmExists("/path/containing") 
+  // --> returns true
+  await nmExists("/path/containing/node_modules") 
+  // --> returns true
+  await nmExists("/path/") 
+  // --> returns false
+  await nmExists("/path/node_modules") 
+  // --> returns false
 })()
 
 ```
 
-#### nmInstall
-> Run `npm install`
+#### nmInstall(szPath)
+> Run `npm install` in specified directory
 
 ```js
+import { nmInstall } from 'nommer'
 
+(async () => {
+  await nmInstall() 
+  // returns null; does nothing
+  await nmInstall(process.cwd()) 
+  // --> returns true; run npm install in cwd
+  await nmInstall("path/to/child/module") 
+  // --> returns true; run npm install in child module
+})
 ```
 
-#### nmRemove
+#### nmRemove(szPath)
 > `rm -Rf` node_modules with some protection
 
-```js
+**Simple Protection**
+1. Is this a `node_modules` directory? If not, stop.
+2. Is this the current working directory? If so, stop.
 
+```js
+import { nmRemove } from 'nommer'
+
+(async () => {
+  await nmRemove() 
+  // --> returns null; does nothing
+  await nmRemove(process.cwd()) 
+  // --> console warning: cannot remove cwd
+  await nmRemove("path/containing/node_modules") 
+  // --> returns true; removes modules
+  await nmRemove("path/containing") 
+  // --> returns true; removes modules
+  await nmRemove("path/") 
+  // --> returns false; does nothing
+})
 ```
