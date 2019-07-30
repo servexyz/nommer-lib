@@ -4,29 +4,23 @@ import { printMirror } from "tacker";
 import execa from "execa";
 import path from "path";
 
-//TODO: Rename all "nm" to "nmr"
+//TODO: Consider creating a run npm script (eg. for "build"); useful for Protato
+//TODO: Consider renaming all "nm" to "nmr"
+
 export async function nmExists(mPath) {
   //TODO: Add logic to append node_modules directory if root directory provided
   try {
-    return await pathsExist(mPath);
+    return await pathsExist(getNodeModulesPath(mPath));
   } catch (e) {
     throw new Error(e);
   }
 }
-export async function getNodeModulesPath(szPath) {
-  // printMirror({ szPath }, "cyan", "grey");
+//TODO: Make this a dumb function (without pathExists check)
+export function getNodeModulesPath(szPath) {
   if (szPath.endsWith("node_modules")) {
     return szPath;
   } else {
-    let nmPath = path.join(szPath, "node_modules");
-    // printMirror({ nmPath }, "cyan", "grey");
-    try {
-      let bNM = await nmExists(szPath);
-      // printMirror({ bNM }, "cyan", "grey");
-      return bNM === true ? nmPath : false;
-    } catch (e) {
-      throw new Error(e);
-    }
+    return path.join(szPath, "node_modules");
   }
 }
 export async function nmInstall(szPath) {
@@ -39,18 +33,10 @@ export async function nmInstall(szPath) {
   }
 }
 export async function nmRemove(szPath) {
-  //? Probably not good idea to actually export this...
-  //? Difficult to protect users from accidentally deleting their own shit.
-  //? Added getNodeModulesPath() as prelim user protection, but still probably not enough
-  //TODO: Add a check that prevents it from running if szPath is === process.cwd()
-  // printMirror({ szPath }, "yellow", "grey");
-  let nmPath = await getNodeModulesPath(szPath);
-  // printMirror({ nmPath }, "yellow", "grey");
-  if (nmPath !== false) {
-    // printMirror({ nmPath }, "yellow", "grey");
-    log(`getNodeModulesPath - nmPath is false`);
+  if (await nmExists(szPath)) {
     try {
-      if (nmPath !== process.cwd()) {
+      let nmPath = getNodeModulesPath(szPath);
+      if (szPath !== process.cwd()) {
         await execa("rm", ["-Rf", nmPath], { cwd: nmPath });
         return true;
       } else {
@@ -63,9 +49,6 @@ export async function nmRemove(szPath) {
       throw new Error(e);
     }
   } else {
-    log("getNodeModulesPath else");
     return false;
   }
 }
-//TODO: Create a remove node_modules directory fn
-//TODO: Create a run npm script (eg. for "build")

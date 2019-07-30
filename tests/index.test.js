@@ -32,7 +32,7 @@ test.before(async t => {
 test.serial(
   `${chalk.blue("nmInstall")} :: modules are added successfully`,
   async t => {
-    if ((await pathsExist(await getNodeModulesPath(symlink))) === false) {
+    if ((await nmExists(symlink)) === false) {
       try {
         t.true(await nmInstall(symlink));
       } catch (e) {
@@ -45,8 +45,7 @@ test.serial(
   }
 );
 test.serial(`${chalk.blue("nmRemove")} :: modules are removed`, async t => {
-  if ((await pathsExist(await getNodeModulesPath(symlink))) === true) {
-  if (res === true) {
+  if ((await nmExists(symlink)) === true) {
     try {
       t.true(await nmRemove(symlink));
     } catch (e) {
@@ -71,12 +70,11 @@ test(`${chalk.blue(
 });
 
 test(`${chalk.blue(
-  "getNodeModulesPath"
-)} :: successfully returns false if path does not exist`, async t => {
+  "nmExists"
+)} :: returns false if path does not exist`, async t => {
   try {
     let fakePath = "/path/does/not/exist";
-    let nmPath = await getNodeModulesPath(fakePath);
-    t.false(nmPath);
+    t.false(await nmExists(fakePath));
   } catch (e) {
     t.fail(e);
   }
