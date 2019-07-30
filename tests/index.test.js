@@ -8,8 +8,9 @@ import test from "ava";
 import path from "path";
 import chalk from "chalk";
 import { printMirror, printLine } from "tacker";
-import { get } from "http";
+import { init } from "repo-genesis";
 
+// https://github.com/servexyz/repo-genesis/blob/master/tests/repo.test.js
 const rootDir = process.cwd();
 const nmDir = path.join(process.cwd(), "node_modules");
 const sandboxNmDir = path.join(
@@ -47,15 +48,27 @@ const sandboxNmDir = path.join(
 //     }
 //   }
 // );
-test(`${chalk.blue("nmUninstall")} :: confirm node_modules in ${chalk.cyan(
-  "npm-starter-sample-module"
-)} are removed`, async t => {
-  try {
-    t.true(await nmUninstall(sandboxNmDir));
-  } catch (e) {
-    throw new Error(e);
+test.before(
+  `${chalk.blue("nmUninstall")} :: confirm node_modules in ${chalk.cyan(
+    "npm-starter-sample-module"
+  )} are removed`,
+  async t => {
+    let rgen = {
+      symlink: path.join(process.cwd(), "sandbox", "npm-starter-sample-module"),
+      repository: path.join(
+        process.cwd(),
+        "sandbox",
+        ".repositories",
+        "npm-starter-sample-module"
+      )
+    };
+    try {
+      t.true(await nmUninstall(sandboxNmDir));
+    } catch (e) {
+      throw new Error(e);
+    }
   }
-});
+);
 test(`${chalk.blue(
   "getNodeModulesPath"
 )} :: adds node_modules to directory`, async t => {
