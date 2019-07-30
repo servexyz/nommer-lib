@@ -22,47 +22,32 @@ import { nmExists, nmInstall, nmRemove, getNodeModulesPath } from 'nommer'
 ## API
 
 #### nmExists(szPath)
-> Check whether node_modules exist at path
+> Check whether node_modules exist at (or one directory below) specified path
 
 ```js
 import { nmExists } from 'nommer'
-import path from 'path'
 
-// Assume that node_modules exist here: 
-// /path/containing/node_modules
-
-let path1 = path.join("path", "containing"); // --> /path/containing
-let path2 = path.join(path1, "node_modules"); // --> /path/containing/node_modules
-let path3 = "/path/"  // --> /path/
-let path4 = path.join("path", "node_modules"); // --> /path/node_modules
+// Assume "/path/containing/node_modules" is path to installed node_modules
 
 (async () => {
-  // /path/containing
-  await nmExists(path1) // --> true
-
-  // /path/containing/node_modules
-  await nmExists(path2) // --> true
-
-  // /path/
-  await nmExists(path3) // --> false
-
-  // /path/node_modules
-  await nmExists(path4) // --> false
+  await nmExists("/path/containing") // --> true
+  await nmExists("/path/containing/node_modules") // --> true
+  await nmExists("/path/") // --> false
+  await nmExists("/path/node_modules") // --> false
 })()
 
 ```
 
-
-
-
 #### nmInstall
+> Run `npm install`
 
+```js
 
-
+```
 
 #### nmRemove
+> `rm -Rf` node_modules with some protection
 
+```js
 
-
-
-#### getNodeModulesPath
+```
