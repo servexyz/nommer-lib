@@ -15,13 +15,13 @@ npm install -S nommer
 #### Import 
 
 ```js
-import { nmExists, nmInstall, nmRemove, getNodeModulesPath } from 'nommer'
+import { nmExists, nmInstall, nmRemove } from 'nommer'
 ```
 
 
 ## API
 
-#### nmExists(szPath)
+### nmExists(szPath)
 > Check whether node_modules exist at (or one directory below) specified path
 
 ```js
@@ -44,7 +44,9 @@ import { nmExists } from 'nommer'
 
 ```
 
-#### nmInstall(szPath)
+---
+
+### nmInstall(szPath)
 > Run `npm install` in specified directory
 
 ```js
@@ -60,7 +62,9 @@ import { nmInstall } from 'nommer'
 })
 ```
 
-#### nmRemove(szPath)
+---
+
+### nmRemove(szPath)
 > `rm -Rf` node_modules with some protection
 
 **Simple Protection**
