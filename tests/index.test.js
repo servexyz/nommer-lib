@@ -2,7 +2,7 @@ const log = console.log;
 import {
   nmExists,
   nmInstall,
-  nmUninstall,
+  nmRemove,
   getNodeModulesPath
 } from "../src/index";
 import test from "ava";
@@ -44,16 +44,16 @@ test.serial(
     }
   }
 );
-test.serial(`${chalk.blue("nmUninstall")} :: modules are removed`, async t => {
+test.serial(`${chalk.blue("nmRemove")} :: modules are removed`, async t => {
   if ((await pathsExist(await getNodeModulesPath(symlink))) === true) {
   if (res === true) {
     try {
-      t.true(await nmUninstall(symlink));
+      t.true(await nmRemove(symlink));
     } catch (e) {
       t.fail(e);
     }
   } else {
-    log(`nmUninstall else`);
+    log(`nmRemove else`);
     t.pass();
   }
 });
@@ -96,7 +96,7 @@ test(`${chalk.blue(
 test.after(async t => {
   try {
     if ((await pathsExist(await getNodeModulesPath(symlink))) === true) {
-      t.true(await nmUninstall(symlink));
+      t.true(await nmRemove(symlink));
     } else {
       t.pass();
     }

@@ -4,6 +4,7 @@ import { printMirror } from "tacker";
 import execa from "execa";
 import path from "path";
 
+//TODO: Rename all "nm" to "nmr"
 export async function nmExists(mPath) {
   //TODO: Add logic to append node_modules directory if root directory provided
   try {
@@ -37,8 +38,7 @@ export async function nmInstall(szPath) {
     return false;
   }
 }
-//TODO: Rename nmUninstall to nmRemove
-export async function nmUninstall(szPath) {
+export async function nmRemove(szPath) {
   //? Probably not good idea to actually export this...
   //? Difficult to protect users from accidentally deleting their own shit.
   //? Added getNodeModulesPath() as prelim user protection, but still probably not enough
@@ -55,7 +55,7 @@ export async function nmUninstall(szPath) {
         return true;
       } else {
         console.warn(
-          "To prevent accidents, nmUninstall will not remove the provided path if it matches your current working directory"
+          "To prevent accidents, nmRemove will not remove the provided path if it matches your current working directory"
         );
         return null;
       }
