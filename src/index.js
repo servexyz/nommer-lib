@@ -8,6 +8,7 @@ import path from "path";
 //TODO: Consider renaming all "nm" to "nmr"
 
 export async function nmExists(mPath) {
+  if (typeof mPath === "undefined") return null;
   //TODO: Add logic to append node_modules directory if root directory provided
   try {
     return await pathsExist(getNodeModulesPath(mPath));
@@ -17,6 +18,7 @@ export async function nmExists(mPath) {
 }
 //TODO: Make this a dumb function (without pathExists check)
 export function getNodeModulesPath(szPath) {
+  if (typeof szPath === "undefined") return null;
   if (szPath.endsWith("node_modules")) {
     return szPath;
   } else {
@@ -34,6 +36,7 @@ export async function nmInstall(szPath) {
   }
 }
 export async function nmRemove(szPath) {
+  if (typeof szPath === "undefined") return null;
   if (await nmExists(szPath)) {
     try {
       let nmPath = getNodeModulesPath(szPath);
@@ -44,7 +47,7 @@ export async function nmRemove(szPath) {
         console.warn(
           "To prevent accidents, nmRemove will not remove the provided path if it matches your current working directory"
         );
-        return null;
+        return false;
       }
     } catch (e) {
       throw new Error(e);
