@@ -18,7 +18,6 @@ npm install -S nommer
 import { nmExists, nmInstall, nmRemove } from 'nommer'
 ```
 
-
 ## API
 
 ### nmExists(szPath)
@@ -27,19 +26,17 @@ import { nmExists, nmInstall, nmRemove } from 'nommer'
 ```js
 import { nmExists } from 'nommer'
 
-// Assume "/path/containing/node_modules" is path to installed node_modules
-
 (async () => {
   await nmExists() 
-  // --> returns null
-  await nmExists("/path/containing") 
-  // --> returns true
-  await nmExists("/path/containing/node_modules") 
-  // --> returns true
-  await nmExists("/path/") 
-  // --> returns false
-  await nmExists("/path/node_modules") 
-  // --> returns false
+  // --> null
+  await nmExists("/right/path/containing") 
+  // --> true
+  await nmExists("/right/path/containing/node_modules") 
+  // --> true
+  await nmExists("/wrong/path/") 
+  // --> false
+  await nmExists("/wrong/path/node_modules") 
+  // --> false
 })()
 
 ```
@@ -53,12 +50,12 @@ import { nmExists } from 'nommer'
 import { nmInstall } from 'nommer'
 
 (async () => {
-  await nmInstall() 
-  // returns null; does nothing
-  await nmInstall(process.cwd()) 
-  // --> returns true; run npm install in cwd
-  await nmInstall("path/to/child/module") 
-  // --> returns true; run npm install in child module
+  await nmInstall()
+  // --> null; does nothing
+  await nmInstall(process.cwd())
+  // --> true; run npm install in cwd
+  await nmInstall("right/path/to/child/module")
+  // --> true; run npm install in child module
 })
 ```
 
@@ -67,7 +64,7 @@ import { nmInstall } from 'nommer'
 ### nmRemove(szPath)
 > `rm -Rf` node_modules with some protection
 
-**Simple Protection**
+**Protection**
 1. Is this a `node_modules` directory? If not, stop.
 2. Is this the current working directory? If so, stop.
 
@@ -75,15 +72,18 @@ import { nmInstall } from 'nommer'
 import { nmRemove } from 'nommer'
 
 (async () => {
-  await nmRemove() 
-  // --> returns null; does nothing
-  await nmRemove(process.cwd()) 
+  await nmRemove()
+  // --> null; does nothing
+  await nmRemove(process.cwd())
   // --> console warning: cannot remove cwd
-  await nmRemove("path/containing/node_modules") 
-  // --> returns true; removes modules
-  await nmRemove("path/containing") 
-  // --> returns true; removes modules
-  await nmRemove("path/") 
-  // --> returns false; does nothing
+  await nmRemove("right/path/containing/node_modules")
+  // --> true; removes modules
+  await nmRemove("right/path/containing")
+  // --> true; removes modules
+  await nmRemove("wrong/path/")
+  // --> false; does nothing
+  await nmRemove("wrong/path/containing/node_modules")
+  // --> false; does nothing
+
 })
 ```
